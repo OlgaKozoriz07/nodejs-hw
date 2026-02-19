@@ -6,7 +6,7 @@ import 'dotenv/config';
 // визначаємо порт для запуску сервера
 // якщо в змінних оточення (process.env.PORT) переданий порт, використовуємо його,
 // якщо ні, тоді запускаємо сервер на 3000 за замовчуванням.
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT ?? 3000;
 
 const app = express();
 
