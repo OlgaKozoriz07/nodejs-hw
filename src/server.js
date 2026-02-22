@@ -11,8 +11,8 @@ import notesRoutes from './routes/notesRoutes.js';
 // якщо в змінних оточення (process.env.PORT) переданий порт, використовуємо його,
 // якщо ні, тоді запускаємо сервер на 3000 за замовчуванням.
 
-const app = express();
 const PORT = process.env.PORT ?? 3000;
+const app = express();
 
 app.use(logger); // логер першим бачить усі запити
 app.use(express.json()); // автоматично парсить (розпаковує) тіло HTTP-запиту,
