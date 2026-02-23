@@ -16,7 +16,7 @@ const noteSchema = mongoose.Schema(
     tag: {
       type: String,
       default: "Todo",
-      enum: ['Work', 'Personal', 'Todo', 'Meeting', 'Shopping', 'Ideas', 'Other'],
+      enum: ["Work", "Personal", "Meeting", "Shopping", "Ideas", "Travel", "Finance", "Health", "Important", "Todo"],
     },
   },
   {
