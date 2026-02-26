@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import { errors } from 'celebrate';
 import { connectMongoDB } from './db/connectMongoDB.js';
 import { logger } from './middleware/logger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js'
@@ -22,6 +23,7 @@ app.use(cors()); // Дозволяє запити з будь-яких джер�
 app.use(notesRoutes); // підключаємо групу маршрутів для нотаток
 
 app.use(notFoundHandler);// 404 якшо маршрут не знайдено
+app.use(errors()); // обробляє помилки валідації, які виникають при використанні celebrate
 app.use(errorHandler); // 500 якшо сталася помилка на сервері
 
 await connectMongoDB();
