@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import { model } from "mongoose";
+import { TAGS } from "../constants/tags.js";
+
 
 const noteSchema = mongoose.Schema(
   {
@@ -16,7 +17,7 @@ const noteSchema = mongoose.Schema(
     tag: {
       type: String,
       default: "Todo",
-      enum: ["Work", "Personal", "Meeting", "Shopping", "Ideas", "Travel", "Finance", "Health", "Important", "Todo"],
+      enum: TAGS,
     },
   },
   {
@@ -24,5 +25,9 @@ const noteSchema = mongoose.Schema(
   }
 );
 
+// Додаємо текстовий індекс: кажемо MongoDB,
+//  що по полю title i content можна робити $text
+noteSchema.index({ title: "text", content: "text" });
+
 // Створюємо модель "Note" на основі схеми noteSchema
-export const Note = model("Note", noteSchema);
+export const Note = mongoose.model("Note", noteSchema);
