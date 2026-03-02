@@ -6,15 +6,26 @@ import {
   deleteNote,
   updateNote,
 } from "../controllers/notesController.js";
+import { celebrate } from "celebrate";
+import {
+  getAllNotesSchema,
+  noteIdSchema,
+  createNoteSchema,
+  updateNoteSchema,
+} from "../validations/notesValidation.js";
 
 const router = Router();
 
-router.get('/notes', getAllNotes);
-router.get('/notes/:noteId', getNoteById);
-router.post('/notes', createNote);
-router.delete('/notes/:noteId', deleteNote);
-router.patch('/notes/:noteId', updateNote);
-
+router.get('/notes', celebrate(getAllNotesSchema), getAllNotes);
+router.get('/notes/:noteId', celebrate(noteIdSchema), getNoteById);
+router.post('/notes', celebrate(createNoteSchema), createNote);
+router.delete('/notes/:noteId', celebrate(noteIdSchema),deleteNote);
+router.patch('/notes/:noteId', celebrate(updateNoteSchema), updateNote);
 
 
 export default router;
+
+
+// celebrate перевіряє тіло запиту за схемою createNotesSchema.
+// Якщо дані некоректні — клієнт одразу отримає 400 Bad Request.
+// Якщо все гаразд — виконається контролер createNote.
