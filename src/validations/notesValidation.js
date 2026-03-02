@@ -41,7 +41,7 @@ export const createNoteSchema = {
       'string.empty': '{{#label}} cannot be empty',
       'any.required': '{{#label}} is required',
     }),
-    content: Joi.string().max(500).allow("").optional(),
+    content: Joi.string().max().allow("").optional(),
     tag: Joi.string().valid(...TAGS).optional(),
   }),
 };
