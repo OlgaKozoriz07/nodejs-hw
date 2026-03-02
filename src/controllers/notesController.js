@@ -28,9 +28,7 @@ export const getAllNotes = async (req, res, next) => {
     // $regex означає частковий пошук
     // $options: 'i'- ігнорує регістр (hello = Hello)
     if (search) {
-      notesQuery.where({
-        title: { $regex: search, $options: 'i' },
-      });
+      notesQuery.where({ $text: { $search: search }  });
     }
 
     //робимо сортування, бо без sort
