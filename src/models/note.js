@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { TAGS } from "../constants/tags.js";
 
 
@@ -19,6 +19,16 @@ const noteSchema = mongoose.Schema(
       default: "Todo",
       enum: TAGS,
     },
+    //розширимо схему нотатки,
+    // додавши поле userId.
+    // Це дозволить зрозуміти,
+    // кому саме належить конкретна нотатка
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User", //означає, що поле userId посилається на інший документ у колекції users.
+      //встановлюємо звязок між колекціями: кожна нотатка належить певному користувачу.
+      required: true,
+   }
   },
   {
     timestamps: true,

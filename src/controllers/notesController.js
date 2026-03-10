@@ -17,7 +17,8 @@ export const getAllNotes = async (req, res, next) => {
     const skip = (numberPage - 1) * numberPerPage;
 
     //базовий запит до колекції
-    const notesQuery = Note.find();
+    // Додаємо критерій пошуку тільки нотаток поточного користувача
+    const notesQuery = Note.find({userId: req._id});
 
     //якшо передали tag тоді додаємо фільтр, це означає
     //знайти тільки ті нотатки, де tag = передане значення
@@ -62,7 +63,12 @@ export const getAllNotes = async (req, res, next) => {
 
 export const getNoteById = async (req, res) => {
   const { noteId } = req.params;
-  const note = await Note.findById(noteId);
+  //потрібно знайти конкретний документ за двома умовами:
+  // _id нотатки і userId власника.
+  const note = await Note.findOne({
+    _id: noteId,
+    userId: req.user._id,
+  });
   if (!note) {
     throw createHttpError(404, 'Note not found');
   }
@@ -70,13 +76,24 @@ export const getNoteById = async (req, res) => {
 };
 
 export const createNote = async (req, res) => {
-  const note = await Note.create(req.body);
+  const note = await Note.create({
+    ...req.body,
+    //додаємо властивість юсерайді
+    //тепер у базі кожна нотатка привязана до конкретного користувача
+    userId: req.user._id,
+  });
   res.status(201).json(note);
 };
 
 export const deleteNote = async (req, res) => {
   const { noteId } = req.params;
-  const note = await Note.findOneAndDelete({ _id: noteId });
+  const note = await Note.findOneAndDelete({
+    _id: noteId,
+    // Критерій пошуку по userId
+    //Таким чином користувач не може видалити
+    // чужого студента навіть якщо знає його id.
+    userId: req.user._id,
+  });
   if (!note) {
     throw createHttpError(404, 'Note not found');
   }
@@ -85,8 +102,11 @@ export const deleteNote = async (req, res) => {
 
 export const updateNote = async (req, res) => {
   const { noteId } = req.params;
-  const note = await Note.findOneAndUpdate(
-    { _id: noteId },
+  const note = await Note.findOneAndUpdate( //ми забезпечили приватність колекції
+     // Критерій пошуку по userId
+     //Усі операції
+     // тепер виконуються в межах даних поточного користувача.
+    { _id: noteId, userId: req.user._id },
     req.body,
     { new: true },
   );

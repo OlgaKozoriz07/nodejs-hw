@@ -6,7 +6,9 @@ import { connectMongoDB } from './db/connectMongoDB.js';
 import { logger } from './middleware/logger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js'
 import { errorHandler } from './middleware/errorHandler.js';
+import authRoutes from './routes/authRoutes.js';
 import notesRoutes from './routes/notesRoutes.js';
+import cookieParser from 'cookie-parser';
 
 // визначаємо порт для запуску сервера
 // якщо в змінних оточення (process.env.PORT) переданий порт, використовуємо його,
@@ -19,6 +21,8 @@ app.use(logger); // логер першим бачить усі запити
 app.use(express.json()); // автоматично парсить (розпаковує) тіло HTTP-запиту,
 // якщо воно надійшло у форматі JSON, і додає його у req.body.
 app.use(cors()); // Дозволяє запити з будь-яких джерел
+app.use(cookieParser());// кукі
+app.use(authRoutes);
 app.use(notesRoutes); // підключаємо групу маршрутів для нотаток
 app.use(notFoundHandler);// 404 якшо маршрут не знайдено
 app.use(errors()); // обробляє помилки валідації, які виникають при використанні celebrate
