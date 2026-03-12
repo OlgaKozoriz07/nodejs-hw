@@ -18,7 +18,7 @@ export const getAllNotes = async (req, res, next) => {
 
     //базовий запит до колекції
     // Додаємо критерій пошуку тільки нотаток поточного користувача
-    const notesQuery = Note.find({userId: req._id});
+    const notesQuery = Note.find({userId: req.user._id});
 
     //якшо передали tag тоді додаємо фільтр, це означає
     //знайти тільки ті нотатки, де tag = передане значення
